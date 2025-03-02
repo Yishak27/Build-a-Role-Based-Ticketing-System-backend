@@ -65,7 +65,8 @@ class App {
         this.app.use(
             cors({
               origin: [ "http://localhost:3000",
-                "https://*.ermiyas.dev",],
+                "https://*.ermiyas.dev",
+                "https://ticket.ermiyas.dev",],
               methods: ['GET', 'POST', 'OPTIONS'],
               credentials: true
             })
@@ -73,7 +74,7 @@ class App {
 
         this.app.use((req, res, next) => {
             console.log('reach here, ', req.headers.origin);
-            const allowedOrigins = ["https://*.ermiyas.dev", "http://localhost:3000/"];
+            const allowedOrigins = ["https://*.ermiyas.dev", "http://localhost:3000/","https://ticket.ermiyas.dev"];
 
             if (allowedOrigins.includes(req.headers.origin)) {
                 res.setHeader('Access-Control-Allow-Origin', req.headers.origin);

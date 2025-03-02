@@ -62,13 +62,14 @@ class App {
         this.app.use(hpp());
         this.app.use(mongoSanitize());
         // this.app.use(limiter);
-
         this.app.use(
             cors({
-                origin: ["https://*.ermiyas.dev", "http://localhost:3000/"],
-                credentials: true,
+              origin: [ "http://localhost:3000",
+                "https://*.ermiyas.dev",],
+              methods: ['GET', 'POST', 'OPTIONS'],
+              credentials: true
             })
-        );
+          );
 
         this.app.use((req, res, next) => {
             console.log('reach here, ', req.headers.origin);

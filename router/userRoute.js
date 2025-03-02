@@ -44,4 +44,37 @@ userRouter.post("/createUser",
     }
   });
 
+userRouter.post('/login', async (req, res) => {
+  try {
+    const { userName, password } = req.body;
+    if (!userName || !password) {
+      return res.status(statusConstant.BAD_REQUEST).send({
+        status: STATUS.FAILED,
+        message: errorMessage.PROVIDE_REQUIRED_FIELDS
+      });
+    }
+    const result = await UserService.login(req.body);
+    // after login is successfull, give auth token, set cookies, and return user details
+    if (result && result.status === STATUS.SUCCESS) {
+      await UserService.setCredentials(res, result.data);
+
+      return res.status(statusConstant.OK).send({
+        status: STATUS.SUCCESS,
+        message: "Login successfully.",
+        data: result.data
+      });
+    } else {
+      return res.status(statusConstant.CREATED).send({
+        status: STATUS.FAILED,
+        message: result.message
+      });
+    }
+  } catch (error) {
+    return res.status(statusConstant.INTERNAL_SERVER_ERROR).send({
+      status: STATUS.FAILED,
+      message: errorMessage.INTERNAL_SERVER_ERROR
+    });
+  }
+});
+
 module.exports = userRouter;

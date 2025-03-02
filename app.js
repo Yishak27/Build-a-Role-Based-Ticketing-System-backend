@@ -15,6 +15,7 @@ const https = require("https");
 const csp = require("helmet-csp");
 const fs = require("fs");
 const morgan = require("morgan");
+const userRouter = require("./router/userRoute");
 
 dotenv.config({
     path: "./config.env",
@@ -32,6 +33,7 @@ class App {
         };
 
         this.initializeMiddlewares();
+        this.intializingRouter();
         this.initializeDatabase();
         this.initializeErrorHandling();
         this.initializeServer();
@@ -59,7 +61,7 @@ class App {
         this.app.use(helmet());
         this.app.use(hpp());
         this.app.use(mongoSanitize());
-        this.app.use(limiter);
+        // this.app.use(limiter);
 
         this.app.use(
             cors({
@@ -113,6 +115,9 @@ class App {
         });
     }
 
+    intializingRouter() {
+        this.app.use("/API/v1.0/ticketing/user", userRouter);
+    }
     initializeDatabase() {
         mongoose.set("strictQuery", true);
         mongoose.connect(process.env.DATABASE_URL, {
@@ -138,8 +143,8 @@ class App {
     }
 
     initializeServer() {
-        const server = this.app.listen(1002, () =>
-            console.log(`Http server port: 1002`)
+        const server = this.app.listen(this.port, () =>
+            console.log(`Http server port: ${this.port}`)
         );
 
         server.setTimeout(180000, (socket) => {

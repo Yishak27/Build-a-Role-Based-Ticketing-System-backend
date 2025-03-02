@@ -3,11 +3,8 @@ const axios = require("axios");
 const userRouter = express.Router();
 const statusConstant = require('../constants/statusConstant');
 const { successMessage, errorMessage } = require('../constants/messageConstant');
-const { userCreationValidator } = require('../middleware/inputHandler');
-const { handleValidation } = require("../controllers/handler/handleValidation");
 const UserService = require("../services/userService");
 const { STATUS } = require("../constants/constant");
-const validateRole = require("../controllers/validateRole");
 const UserSchema = require("../model/UserSchema");
 const AttemptSchema = require("../model/AttemptSchema");
 
@@ -20,6 +17,8 @@ userRouter.use('/get', (req, res) => {
 userRouter.post("/createUser",
   async (req, res) => {
     try {
+      console.log('sssssssss');
+      
       const result = await UserService.createUser(req.body);
       if (result && result.status === STATUS.SUCCESS) {
         return res.status(statusConstant.CREATED).send({
@@ -42,5 +41,5 @@ userRouter.post("/createUser",
       });
     }
   });
-  
+
 module.exports = userRouter;

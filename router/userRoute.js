@@ -7,6 +7,8 @@ const UserService = require("../services/userService");
 const { STATUS } = require("../constants/constant");
 const UserSchema = require("../model/UserSchema");
 const AttemptSchema = require("../model/AttemptSchema");
+const { userCreationValidator } = require("../middleware/inputHandler");
+const { handleValidation } = require("../controllers/handler/handleValidation");
 
 userRouter.use('/get', (req, res) => {
   return res.status(statusConstant.OK).send({
@@ -15,6 +17,8 @@ userRouter.use('/get', (req, res) => {
 });
 
 userRouter.post("/createUser",
+  userCreationValidator,
+  handleValidation,
   async (req, res) => {
     try {
       const result = await UserService.createUser(req.body);

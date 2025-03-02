@@ -17,8 +17,6 @@ userRouter.use('/get', (req, res) => {
 userRouter.post("/createUser",
   async (req, res) => {
     try {
-      console.log('sssssssss');
-      
       const result = await UserService.createUser(req.body);
       if (result && result.status === STATUS.SUCCESS) {
         return res.status(statusConstant.CREATED).send({

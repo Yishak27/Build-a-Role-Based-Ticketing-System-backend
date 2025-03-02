@@ -5,6 +5,13 @@ const { errorMessage, successMessage } = require("../constants/messageConstant")
 class UserService {
     static async createUser(params) {
         try {
+            const isExist = await UserSchema.findOne({ userName: params.userName });
+            if (isExist) {
+                return {
+                    status: STATUS.FAILED,
+                    message: "User Already Exist with username of" + params.userName
+                }
+            }
             const salt = await bcrypt.genSalt(10);
             console.log('body', params);
             params.password = await bcrypt.hash(params.password, salt);
@@ -18,6 +25,7 @@ class UserService {
             } else {
                 return {
                     status: STATUS.FAILED,
+                    message: "Unable to create user."
                 }
             }
         } catch (error) {

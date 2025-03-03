@@ -60,7 +60,7 @@ ticketRoute.get('/getticket/:userName', async (req, res) => {
         });
     }
 });
-ticketRoute.get('/getAllTicket', async(req, res)=>{
+ticketRoute.get('/getAllTicket', async (req, res) => {
     try {
         const ticket = await TicketSchema.find({});
         if (ticket) {
@@ -77,6 +77,40 @@ ticketRoute.get('/getAllTicket', async(req, res)=>{
         }
     } catch (error) {
         console.log('Error in getting ticket', error);
+        return res.status(statusConstant.INTERNAL_SERVER_ERROR).json({
+            status: STATUS.FAILED,
+            message: "Internal server error"
+        });
+    }
+});
+
+ticketRoute.post('/updateTicket/:ticketNumber', async (req, res) => {
+    try {
+        const { ticketNumber } = req.params;
+        const {  ticketStatus } = req.body;
+        console.log(ticketNumber, ticketStatus, 'is here...');
+        
+        if (!ticketStatus) {
+            return res.status(statusConstant.CREATED).json({
+                status: STATUS.FAILED,
+                message: "Ticket status is required"
+            });
+        }
+        const result = await TicketSchema.findOneAndUpdate({ticketNumber: ticketNumber }, { ticketStatus }, { new: true });
+        if (result) {
+            return res.status(statusConstant.OK).send({
+                status: STATUS.SUCCESS,
+                message: "Ticket updated successfully",
+                data: result
+            });
+        } else {
+            return res.status(statusConstant.CREATED).json({
+                status: STATUS.FAILED,
+                message: "Ticket not found"
+            });
+        }
+    } catch (error) {
+        console.log('Error in updating ticket', error);
         return res.status(statusConstant.INTERNAL_SERVER_ERROR).json({
             status: STATUS.FAILED,
             message: "Internal server error"

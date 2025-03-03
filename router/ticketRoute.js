@@ -59,5 +59,28 @@ ticketRoute.get('/getticket/:userName', async (req, res) => {
             message: "Internal server error"
         });
     }
+});
+ticketRoute.get('/getAllTicket', async(req, res)=>{
+    try {
+        const ticket = await TicketSchema.find({});
+        if (ticket) {
+            return res.status(statusConstant.OK).send({
+                status: STATUS.SUCCESS,
+                message: "Ticket found",
+                data: ticket
+            });
+        } else {
+            return res.status(statusConstant.CREATED).json({
+                status: STATUS.FAILED,
+                message: "Ticket not found"
+            });
+        }
+    } catch (error) {
+        console.log('Error in getting ticket', error);
+        return res.status(statusConstant.INTERNAL_SERVER_ERROR).json({
+            status: STATUS.FAILED,
+            message: "Internal server error"
+        });
+    }
 })
 module.exports = ticketRoute;

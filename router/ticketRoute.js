@@ -2,6 +2,7 @@ const express = require('express');
 const statusConstant = require('../constants/statusConstant');
 const { STATUS } = require('../constants/constant');
 const { createTicket } = require('../services/ticketService');
+const TicketSchema = require('../model/TicketSchema');
 const ticketRoute = express.Router();
 
 ticketRoute.post('/create', async (req, res) => {
@@ -35,4 +36,28 @@ ticketRoute.post('/create', async (req, res) => {
     }
 });
 
+ticketRoute.get('/getticket/:userName', async (req, res) => {
+    try {
+        const { userName } = req.params;
+        const ticket = await TicketSchema.find({ createdBy: userName });
+        if (ticket) {
+            return res.status(statusConstant.OK).send({
+                status: STATUS.SUCCESS,
+                message: "Ticket found",
+                data: ticket
+            });
+        } else {
+            return res.status(statusConstant.CREATED).json({
+                status: STATUS.FAILED,
+                message: "Ticket not found"
+            });
+        }
+    } catch (error) {
+        console.log('Error in getting ticket', error);
+        return res.status(statusConstant.INTERNAL_SERVER_ERROR).json({
+            status: STATUS.FAILED,
+            message: "Internal server error"
+        });
+    }
+})
 module.exports = ticketRoute;

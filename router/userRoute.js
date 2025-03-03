@@ -57,7 +57,8 @@ userRouter.post('/login', async (req, res) => {
     // after login is successfull, give auth token, set cookies, and return user details
     if (result && result.status === STATUS.SUCCESS) {
       await UserService.setCredentials(res, result.data);
-
+      console.log('response login,', result.data);
+      
       return res.status(statusConstant.OK).send({
         status: STATUS.SUCCESS,
         message: "Login successfully.",

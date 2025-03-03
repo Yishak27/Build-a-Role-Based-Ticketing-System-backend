@@ -16,6 +16,7 @@ const csp = require("helmet-csp");
 const fs = require("fs");
 const morgan = require("morgan");
 const userRouter = require("./router/userRoute");
+const ticketRoute = require("./router/ticketRoute");
 
 dotenv.config({
     path: "./config.env",
@@ -64,17 +65,17 @@ class App {
         // this.app.use(limiter);
         this.app.use(
             cors({
-              origin: [ "http://localhost:3000",
-                "https://*.ermiyas.dev",
-                "https://ticket.ermiyas.dev",],
-              methods: ['GET', 'POST', 'OPTIONS'],
-              credentials: true
+                origin: ["http://localhost:3000",
+                    "https://*.ermiyas.dev",
+                    "https://ticket.ermiyas.dev",],
+                methods: ['GET', 'POST', 'OPTIONS'],
+                credentials: true
             })
-          );
+        );
 
         this.app.use((req, res, next) => {
             console.log('reach here, ', req.headers.origin);
-            const allowedOrigins = ["https://*.ermiyas.dev", "http://localhost:3000/","https://ticket.ermiyas.dev"];
+            const allowedOrigins = ["https://*.ermiyas.dev", "http://localhost:3000/", "https://ticket.ermiyas.dev"];
 
             if (allowedOrigins.includes(req.headers.origin)) {
                 res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
@@ -119,6 +120,7 @@ class App {
 
     intializingRouter() {
         this.app.use("/API/v1.0/ticketing/user", userRouter);
+        this.app.use("/API/v1.0/ticketing/ticket", ticketRoute);
     }
     initializeDatabase() {
         mongoose.set("strictQuery", true);

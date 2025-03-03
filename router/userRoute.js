@@ -16,7 +16,7 @@ userRouter.use('/get', (req, res) => {
   });
 });
 
-userRouter.post("/createUser",
+userRouter.post("/signup",
   userCreationValidator,
   handleValidation,
   async (req, res) => {
@@ -76,5 +76,22 @@ userRouter.post('/login', async (req, res) => {
     });
   }
 });
-
+userRouter.get('/logout', async (req, res) => {
+  try {
+    const user = req.cookies.userName;
+    if (user) {
+      res.clearCookie("token")
+      res.clearCookie("userName")
+    }
+    return res.status(200).send({
+      status: true,
+      message: "Log out successfully",
+    })
+  } catch (error) {
+    return res.status(500).send({
+      status: false,
+      message: "internal server error",
+    })
+  }
+})
 module.exports = userRouter;

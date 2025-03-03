@@ -10,7 +10,7 @@ class UserService {
             if (isExist) {
                 return {
                     status: STATUS.FAILED,
-                    message: "User Already Exist with username of" + params.userName
+                    message: "User Already Exist with username of " + params.userName + " please use other userName"
                 }
             }
             const salt = await bcrypt.genSalt(10);
@@ -92,7 +92,7 @@ class UserService {
             });
 
             res.cookie('userName', user.userName, {
-                expires: new Date(Date.now() + 3600000), 
+                expires: new Date(Date.now() + 3600000),
                 httpOnly: true
             });
         } catch (error) {

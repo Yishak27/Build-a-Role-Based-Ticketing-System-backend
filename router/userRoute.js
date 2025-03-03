@@ -30,7 +30,7 @@ userRouter.post("/signup",
         });
       }
       else {
-        return res.status(statusConstant.INTERNAL_SERVER_ERROR).send({
+        return res.status(statusConstant.CREATED).send({
           status: STATUS.FAILED,
           message: result.message
         });

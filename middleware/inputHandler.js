@@ -5,7 +5,7 @@ const userCreationValidator = [
         .isString().withMessage('Username must be a string.')
         .notEmpty().withMessage('Username is required.')
         .isLength({ min: 3 }).withMessage('Username must be at least 3 characters long.'),
-        
+
     body('password')
         .isString().withMessage('Password must be a string.')
         .notEmpty().withMessage('Password is required.')
@@ -22,7 +22,8 @@ const userCreationValidator = [
     body('phoneNumber')
         .isString().withMessage('Phone number must be a string.')
         .notEmpty().withMessage('Phone number is required.')
-        .isMobilePhone().withMessage('Invalid phone number format.'),
+        .isMobilePhone().withMessage('Invalid phone number format.')
+        .isLength({ min: 9 }).withMessage('Phone number must be at least 9 characters long.'),
 
     body('address')
         .optional()
